@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <algorithm>
 using namespace std;
 
 void readFile(map<double, vector<string>>& transactionAmount, map<string, vector<vector<string>>>& transactionInfo) {
@@ -11,8 +12,7 @@ void readFile(map<double, vector<string>>& transactionAmount, map<string, vector
 
     ifstream fin("FraudulentTransaction.csv");
     if (!fin.is_open()) {
-        cerr << "Error opening file" << endl;
-        cerr << strerror(errno) << endl;
+        cout << "Error opening file" << endl;
         return;
     }
 
