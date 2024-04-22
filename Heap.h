@@ -26,7 +26,7 @@ public:
             currInd = parent;
         }
     }
-    void heapify(int i) {
+    void heapify() {
         int currInd = 0;
         while (currInd < heap.size()/2) {
             int child = currInd*2+2;
@@ -36,7 +36,7 @@ public:
             if (compare(heap[child].first, heap[currInd].first)) {
                 break;
             }
-            Key temp = heap[currInd];
+            std::pair<Key, Value> temp = heap[currInd];
             heap[currInd] = heap[child];
             heap[child] = temp;
             currInd = child;
@@ -45,7 +45,7 @@ public:
 
     Value pop() {
         Value top = peek();
-        heap.dequeue();
+        dequeue();
         return top;
     }
     Value peek() {
@@ -58,6 +58,16 @@ public:
     }
     int size() {
         return heap.size();
+    }
+    void print20() {
+        for(int i = 0; i < 20; i++) {
+            int n = 0;
+            for (std::string s: *(pop())) {
+                std::cout << s;
+                if (n++ < 6) std::cout << ", ";
+            }
+            std::cout << std::endl;
+        }
     }
 };
 

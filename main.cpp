@@ -84,9 +84,8 @@ void readFileHeap(Heap<double, vector<string>*>& AmountMax, Heap<double, vector<
                 method = word;
             } else if (i == 5) {
                 category = word;
-            } else {
-                info.push_back(word);
             }
+            info.push_back(word);
             i++;
         }
 
@@ -311,15 +310,18 @@ int main() {
             if (command == 1) {
                 cout<<endl;
                 viewTop20Highest(transactionAmount, transactionInfo);
+                AmountMax.print20();
             } else if (command == 2) {
                 cout<<endl;
                 viewTop20Lowest(transactionAmount, transactionInfo);
+                AmountMin.print20();
             } else if (command == 3) {
                 string date;
                 cout << "Please enter the date (use this format: yyyy-mm-dd) on which you want to view the fraudulent transactions: " << endl;
                 cin >> date;
                 cout<<endl;
                 searchByDate(transactionAmount, transactionInfo, date);
+                AgeMax.print20();
             } else if (command == 4) {
                 int category;
                 cout << "Product Categories:";
@@ -327,7 +329,11 @@ int main() {
                 cout << "Please enter the number associated with the product category you want to view the fraudulent transactions: " << endl;
                 cin >> category;
                 cout<<endl;
-                if (category == 1) {searchByCategory(transactionAmount, transactionInfo, "clothing");}
+
+                if (category == 1) {
+                    searchByCategory(transactionAmount, transactionInfo, "clothing");
+                    if(CategoryMax.peek()->at(5) == "electronics") cout << CategoryMax.pop();
+                }
                 else if (category == 2) {searchByCategory(transactionAmount, transactionInfo, "electronics");}
                 else if (category == 3) {searchByCategory(transactionAmount, transactionInfo, "health & beauty");}
                 else if (category == 4) {searchByCategory(transactionAmount, transactionInfo, "home & garden");}
