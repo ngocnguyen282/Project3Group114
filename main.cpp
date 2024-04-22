@@ -1,9 +1,12 @@
+
 #include <iostream>
 #include <sstream>
 #include <fstream>
 #include <string>
 #include <vector>
 #include <map>
+#include <algorithm>
+#include "Heap.h"
 using namespace std;
 
 void readFile(map<double, vector<string>>& transactionAmount, map<string, vector<vector<string>>>& transactionInfo) {
@@ -11,8 +14,7 @@ void readFile(map<double, vector<string>>& transactionAmount, map<string, vector
 
     ifstream fin("FraudulentTransaction.csv");
     if (!fin.is_open()) {
-        cerr << "Error opening file" << endl;
-        cerr << strerror(errno) << endl;
+        cout << "Error opening file" << endl;
         return;
     }
 
@@ -46,6 +48,61 @@ void readFile(map<double, vector<string>>& transactionAmount, map<string, vector
     fin.close();
 }
 
+void readFileHeap(Heap<double, vector<string>*>& AmountMax, Heap<double, vector<string>*>& AmountMin, Heap<string, vector<string>*>& AgeMax, Heap<string, vector<string>*>& AgeMin, Heap<string, vector<string>*>& CategoryMax, Heap<string, vector<string>*>& CategoryMin, Heap<string, vector<string>*>& MethodMax, Heap<string, vector<string>*>& MethodMin) {
+    string line, word;
+
+    ifstream fin("FraudulentTransaction.csv");
+    if (!fin.is_open()) {
+        cout << "Error opening file" << endl;
+        return;
+    }
+
+    getline(fin, line);
+    while (getline(fin, line)) {
+        stringstream s(line);
+        // char last = line[line.length() - 2];
+        // cout << last;
+        // abc.push_back(line.back());
+        int i = 0;
+        string transactionID;
+        string amount;
+        string age;
+        string category;
+        string method;
+        vector<string>& info = *(new vector<string>());
+        if(line[line.length() - 2] == '1') {
+            info.push_back("Fraud");
+        }
+        while (getline(s, word, ',')) {
+            if (i == 0) {
+                transactionID = word;
+            } else if (i == 2) {
+                amount = word;
+            } else if (i == 3) {
+                age = word;
+            } else if (i == 4) {
+                method = word;
+            } else if (i == 5) {
+                category = word;
+            } else {
+                info.push_back(word);
+            }
+            i++;
+        }
+
+        AmountMax.enqueue(stod(amount),&info);
+        AmountMin.enqueue(stod(amount),&info);
+        AgeMax.enqueue(age,&info);
+        AgeMin.enqueue(age,&info);
+        CategoryMax.enqueue(category,&info);
+        CategoryMin.enqueue(category,&info);
+        MethodMax.enqueue(method,&info);
+        MethodMin.enqueue(method,&info);
+    }
+    fin.close();
+}
+
+
 void viewTop20Highest(map<double, vector<string>>& transactionAmount, map<string, vector<vector<string>>>& transactionInfo) {
     // cout << transactionAmount.size() << " " << transactionInfo.size() << endl;
     int count = 0;
@@ -77,6 +134,9 @@ void viewTop20Highest(map<double, vector<string>>& transactionAmount, map<string
         }
     }
 }
+
+
+
 
 void viewTop20Lowest(map<double, vector<string>>& transactionAmount, map<string, vector<vector<string>>>& transactionInfo) {
     int count = 0;
@@ -201,9 +261,30 @@ void searchByPaymentMethod(map<double, vector<string>>& transactionAmount, map<s
     }
 }
 
+bool intGreater(double a, double b) {
+    return a > b;
+}
+bool intLesser(double a, double b) {
+    return a < b;
+}
+bool stringGreater(string a, string b) {
+    return a > b;
+}
+bool stringLesser(string a, string b) {
+    return a < b;
+}
+
 int main() {
     map<double, vector<string>> transactionAmount;
     map<string, vector<vector<string>>> transactionInfo;
+    Heap<double,vector<string>*> AmountMax(intGreater);
+    Heap<double,vector<string>*> AmountMin(intLesser);
+    Heap<string,vector<string>*> AgeMax(stringGreater);
+    Heap<string,vector<string>*> AgeMin(stringLesser);
+    Heap<string,vector<string>*> CategoryMax(stringGreater);
+    Heap<string,vector<string>*> CategoryMin(stringLesser);
+    Heap<string,vector<string>*> MethodMax(stringGreater);
+    Heap<string,vector<string>*> MethodMin(stringLesser);
 
     std::cout << "Let's analyze some fraudulent transactions!" << std::endl;
     while(true){
@@ -225,6 +306,7 @@ int main() {
             break;
         } else {
             readFile(transactionAmount, transactionInfo);
+            readFileHeap(AmountMax, AmountMin, AgeMax, AgeMin, CategoryMax, CategoryMin, MethodMax, MethodMin);
 
             if (command == 1) {
                 cout<<endl;
