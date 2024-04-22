@@ -402,7 +402,7 @@ int main() {
                 if (command == 1) {
                     cout<<endl;
                     auto start = high_resolution_clock::now();
-                    AmountMax.print20();
+                    AmountMin.print20();
                     auto stop = high_resolution_clock::now();
                     auto duration = duration_cast<microseconds>(stop - start);
                     cout << "This function execution took: " << duration.count() << " microsecond(s)" << endl;
@@ -410,7 +410,7 @@ int main() {
                 } else if (command == 2) {
                     cout<<endl;
                     auto start = high_resolution_clock::now();
-                    AmountMin.print20();
+                    AmountMax.print20();
                     auto stop = high_resolution_clock::now();
                     auto duration = duration_cast<microseconds>(stop - start);
                     cout << "This function execution took: " << duration.count() << " microsecond(s)" << endl;
