@@ -85,8 +85,9 @@ void readFileHeap(Heap<double, vector<string>*>& AmountMax, Heap<double, vector<
                 method = word;
             } else if (i == 5) {
                 category = word;
-            } 
-            info.push_back(word);
+            } else {
+                info.push_back(word);
+            }
             i++;
         }
 
