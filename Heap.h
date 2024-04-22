@@ -62,10 +62,13 @@ public:
     void print20() {
         for(int i = 0; i < 20; i++) {
             int n = 0;
-            for (std::string s: *(pop())) {
-                std::cout << s;
-                if (n++ < 6) std::cout << ", ";
-            }
+            std::vector<std::string> strings = *(pop());
+            //std::cout << strings[0];
+            std::cout << "Transaction Amount: " << strings[2] << std::endl;
+            std::cout << "Customer ID: " << strings[1] << std::endl;
+            std::cout << "Transaction Date: " << strings[3] << std::endl;
+            std::cout << "Payment Method: " << strings[4] << std::endl;
+            std::cout << "Product Category: " << strings[5] << std::endl;
             std::cout << std::endl;
         }
     }
