@@ -13,19 +13,60 @@ public:
         this->compare = compare;
     }
     void enqueue(Key key, Value val) {
-        heap.push_back({key,val});
-        int currInd = heap.size()-1;
-        while (currInd > 0) {
-            int parent = (currInd - 1)/2;
-            if (compare(heap[currInd].first, heap[parent].first)) {
-                break;
+            heap.push_back({key, val});
+            int currInd = heap.size() - 1;
+            while (currInd > 0) {
+                int parent = (currInd - 1) / 2;
+                if (compare(heap[currInd].first, heap[parent].first)) {
+                    break;
+                }
+                std::pair<Key, Value> temp = heap[currInd];
+                heap[currInd] = heap[parent];
+                heap[parent] = temp;
+                currInd = parent;
             }
-            std::pair<Key,Value> temp = heap[currInd];
-            heap[currInd] = heap[parent];
-            heap[parent] = temp;
-            currInd = parent;
+    }
+    void searchDate(std::string date) {
+        for (int i = 0; i < heap.size(); i++) {
+            std::vector<std::string> strings = *(pop());
+            if (strings[3].substr(0, 10) == date && strings[6] == "1") {
+                std::cout << "Transaction Amount: " << strings[2] << std::endl;
+                std::cout << "Customer ID: " << strings[1] << std::endl;
+                std::cout << "Transaction Date: " << strings[3] << std::endl;
+                std::cout << "Payment Method: " << strings[4] << std::endl;
+                std::cout << "Product Category: " << strings[5] << std::endl;
+                std::cout << std::endl;
+            } else *pop();
         }
     }
+    void searchCategory(std::string category) {
+        for (int i = 0; i < heap.size(); i++) {
+            std::vector<std::string> strings = *(pop());
+            if (strings[5] == category && strings[6] == "1") {
+                std::cout << "Transaction Amount: " << strings[2] << std::endl;
+                std::cout << "Customer ID: " << strings[1] << std::endl;
+                std::cout << "Transaction Date: " << strings[3] << std::endl;
+                std::cout << "Payment Method: " << strings[4] << std::endl;
+                std::cout << "Product Category: " << strings[5] << std::endl;
+                std::cout << std::endl;
+
+            } else *pop();
+        }
+    }
+    void searchPaymentMethod(std::string method) {
+        for (int i = 0; i < heap.size(); i++) {
+            std::vector<std::string> strings = *(pop());
+            if (strings[4] == method && strings[6] == "1") {
+                std::cout << "Transaction Amount: " << strings[2] << std::endl;
+                std::cout << "Customer ID: " << strings[1] << std::endl;
+                std::cout << "Transaction Date: " << strings[3] << std::endl;
+                std::cout << "Payment Method: " << strings[4] << std::endl;
+                std::cout << "Product Category: " << strings[5] << std::endl;
+                std::cout << std::endl;
+            } else *pop();
+        }
+    }
+
     void heapify() {
         int currInd = 0;
         while (currInd < heap.size()/2) {
@@ -59,13 +100,15 @@ public:
     int size() {
         return heap.size();
     }
+
     void print20() {
         for(int i = 0; i < 20; i++) {
-            int n = 0;
-            for (std::string s: *(pop())) {
-                std::cout << s;
-                if (n++ < 6) std::cout << ", ";
-            }
+            std::vector<std::string> strings = *(pop());
+            std::cout << "Transaction Amount: " << strings[2] << std::endl;
+            std::cout << "Customer ID: " << strings[1] << std::endl;
+            std::cout << "Transaction Date: " << strings[3] << std::endl;
+            std::cout << "Payment Method: " << strings[4] << std::endl;
+            std::cout << "Product Category: " << strings[5] << std::endl;
             std::cout << std::endl;
         }
     }
