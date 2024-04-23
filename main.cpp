@@ -85,9 +85,8 @@ void readFileHeap(Heap<double, vector<string>*>& AmountMax, Heap<double, vector<
                 method = word;
             } else if (i == 5) {
                 category = word;
-            } else {
-                info.push_back(word);
             }
+            info.push_back(word);
             i++;
         }
 
@@ -141,9 +140,6 @@ void viewTop20Highest(map<double, vector<string>>& transactionAmount, map<string
     }
 }
 
-
-
-
 void viewTop20Lowest(map<double, vector<string>>& transactionAmount, map<string, vector<vector<string>>>& transactionInfo) {
     // set up a counter to print only 20 transactions
     int count = 0;
@@ -170,6 +166,7 @@ void viewTop20Lowest(map<double, vector<string>>& transactionAmount, map<string,
                             }
                         }
                         cout << endl;
+                        ++count;
                     }
                 }
             }
@@ -306,6 +303,10 @@ int main() {
     Heap<string,vector<string>*> MethodMax(stringGreater);
     Heap<string,vector<string>*> MethodMin(stringLesser);
 
+    // read csv source files
+    readFile(transactionAmount, transactionInfo);
+    readFileHeap(AmountMax, AmountMin, AgeMax, AgeMin, CategoryMax, CategoryMin, MethodMax, MethodMin);
+
     // Prompt user for command to start
     // Then print results along with how long it takes to run the execution
     cout << "Let's analyze some fraudulent transactions!" << endl;
@@ -327,16 +328,15 @@ int main() {
             cout << "Thank you and have a great day!" << endl;
             break;
         } else {
-            cout << "Which data structure you would like to use?" << endl;
-            cout << "[1] Map" << endl;
-            cout << "[2] Heap" << endl;
+            if (command == 1) {
+                cout << "Which data structure you would like to use?" << endl;
+                cout << "[1] Map" << endl;
+                cout << "[2] Heap" << endl;
 
-            int dataStructureChoice;
-            cin >> dataStructureChoice;
+                int dataStructureChoice;
+                cin >> dataStructureChoice;
 
-            if (dataStructureChoice == 1) {
-                readFile(transactionAmount, transactionInfo);
-                if (command == 1) {
+                if (dataStructureChoice == 1) {
                     cout<<endl;
                     auto start = high_resolution_clock::now();
                     viewTop20Highest(transactionAmount, transactionInfo);
@@ -344,70 +344,7 @@ int main() {
                     auto duration = duration_cast<microseconds>(stop - start);
                     cout << "This function execution took: " << duration.count() << " microsecond(s)" << endl;
                     cout<<endl;
-                } else if (command == 2) {
-                    cout<<endl;
-                    auto start = high_resolution_clock::now();
-                    viewTop20Lowest(transactionAmount, transactionInfo);
-                    auto stop = high_resolution_clock::now();
-                    auto duration = duration_cast<microseconds>(stop - start);
-                    cout << "This function execution took: " << duration.count() << " microsecond(s)" << endl;
-                    cout<<endl;
-                } else if (command == 3) {
-                    string date;
-                    cout << "Please enter the date (use this format: yyyy-mm-dd) on which you want to view the fraudulent transactions: " << endl;
-                    cin >> date;
-                    cout<<endl;
-                    auto start = high_resolution_clock::now();
-                    searchByDate(transactionAmount, transactionInfo, date);
-                    auto stop = high_resolution_clock::now();
-                    auto duration = duration_cast<microseconds>(stop - start);
-                    cout << "This function execution took: " << duration.count() << " microsecond(s)" << endl;
-                    cout<<endl;
-                } else if (command == 4) {
-                    int category;
-                    cout << "Product Categories:";
-                    cout << "[1] clothing, [2] electronics, [3] health & beauty, [4] home & garden, [5] toys & games" << endl;
-                    cout << "Please enter the number associated with the product category you want to view the fraudulent transactions: " << endl;
-                    cin >> category;
-                    cout<<endl;
-                    auto start = high_resolution_clock::now();
-                    if (category == 1) {searchByCategory(transactionAmount, transactionInfo, "clothing");}
-                    else if (category == 2) {searchByCategory(transactionAmount, transactionInfo, "electronics");}
-                    else if (category == 3) {searchByCategory(transactionAmount, transactionInfo, "health & beauty");}
-                    else if (category == 4) {searchByCategory(transactionAmount, transactionInfo, "home & garden");}
-                    else if (category == 5) {searchByCategory(transactionAmount, transactionInfo, "toys & games");}
-                    auto stop = high_resolution_clock::now();
-                    auto duration = duration_cast<microseconds>(stop - start);
-                    cout << "This function execution took: " << duration.count() << " microsecond(s)" << endl;
-                    cout<<endl;
-                } else if (command == 5) {
-                    int payment;
-                    cout << "Payment Methods:";
-                    cout << "[1] bank transfer, [2] credit card, [3] debit card, [4] PayPal" << endl;
-                    cout << "Please enter the number associated with the payment method you want to view the fraudulent transactions: " << endl;
-                    cin >> payment;
-                    cout<<endl;
-                    auto start = high_resolution_clock::now();
-                    if (payment == 1) {searchByPaymentMethod(transactionAmount, transactionInfo, "bank transfer");}
-                    else if (payment == 2) {searchByPaymentMethod(transactionAmount, transactionInfo, "credit card");}
-                    else if (payment == 3) {searchByPaymentMethod(transactionAmount, transactionInfo, "debit card");}
-                    else if (payment == 4) {searchByPaymentMethod(transactionAmount, transactionInfo, "PayPal");}
-                    auto stop = high_resolution_clock::now();
-                    auto duration = duration_cast<microseconds>(stop - start);
-                    cout << "This function execution took: " << duration.count() << " microsecond(s)" << endl;
-                    cout<<endl;
-                }
-            } else if (dataStructureChoice == 2) {
-                readFileHeap(AmountMax, AmountMin, AgeMax, AgeMin, CategoryMax, CategoryMin, MethodMax, MethodMin);
-                if (command == 1) {
-                    cout<<endl;
-                    auto start = high_resolution_clock::now();
-                    AmountMin.print20();
-                    auto stop = high_resolution_clock::now();
-                    auto duration = duration_cast<microseconds>(stop - start);
-                    cout << "This function execution took: " << duration.count() << " microsecond(s)" << endl;
-                    cout<<endl;
-                } else if (command == 2) {
+                } else if (dataStructureChoice == 2) {
                     cout<<endl;
                     auto start = high_resolution_clock::now();
                     AmountMax.print20();
@@ -415,25 +352,109 @@ int main() {
                     auto duration = duration_cast<microseconds>(stop - start);
                     cout << "This function execution took: " << duration.count() << " microsecond(s)" << endl;
                     cout<<endl;
-                } else if (command == 3) {
-                    string date;
-                    cout << "Please enter the date (use this format: yyyy-mm-dd) on which you want to view the fraudulent transactions: " << endl;
-                    cin >> date;
+                }
+            } else if (command == 2) {
+                cout << "Which data structure you would like to use?" << endl;
+                cout << "[1] Map" << endl;
+                cout << "[2] Heap" << endl;
+
+                int dataStructureChoice;
+                cin >> dataStructureChoice;
+
+                if (dataStructureChoice == 1) {
+                    cout << endl;
+                    auto start = high_resolution_clock::now();
+                    viewTop20Lowest(transactionAmount, transactionInfo);
+                    auto stop = high_resolution_clock::now();
+                    auto duration = duration_cast<microseconds>(stop - start);
+                    cout << "This function execution took: " << duration.count() << " microsecond(s)" << endl;
+                    cout << endl;
+                } else if (dataStructureChoice == 2) {
                     cout<<endl;
+                    auto start = high_resolution_clock::now();
+                    viewTop20Lowest(transactionAmount, transactionInfo);
+                    auto stop = high_resolution_clock::now();
+                    auto duration = duration_cast<microseconds>(stop - start);
+                    cout << "This function execution took: " << duration.count() << " microsecond(s)" << endl;
+                    cout<<endl;
+                }
+            } else if (command == 3) {
+                cout << "Which data structure you would like to use?" << endl;
+                cout << "[1] Map" << endl;
+                cout << "[2] Heap" << endl;
+
+                int dataStructureChoice;
+                cin >> dataStructureChoice;
+
+                if (dataStructureChoice == 1) {
+                    string date;
+                    cout
+                            << "Please enter the date (use this format: yyyy-mm-dd) on which you want to view the fraudulent transactions: "
+                            << endl;
+                    cin >> date;
+                    cout << endl;
                     auto start = high_resolution_clock::now();
                     searchByDate(transactionAmount, transactionInfo, date);
                     auto stop = high_resolution_clock::now();
                     auto duration = duration_cast<microseconds>(stop - start);
                     cout << "This function execution took: " << duration.count() << " microsecond(s)" << endl;
-                    cout<<endl;
-                } else if (command == 4) {
-                    cout<<endl;
+                    cout << endl;
+                }
+            } else if (command == 4) {
+                cout << "Which data structure you would like to use?" << endl;
+                cout << "[1] Map" << endl;
+                cout << "[2] Heap" << endl;
+
+                int dataStructureChoice;
+                cin >> dataStructureChoice;
+
+                if (dataStructureChoice == 1) {
+                    int category;
+                    cout << "Product Categories:";
+                    cout << "[1] clothing, [2] electronics, [3] health & beauty, [4] home & garden, [5] toys & games"
+                         << endl;
+                    cout
+                            << "Please enter the number associated with the product category you want to view the fraudulent transactions: "
+                            << endl;
+                    cin >> category;
+                    cout << endl;
                     auto start = high_resolution_clock::now();
-                    if(CategoryMax.peek()->at(5) == "electronics") cout << CategoryMax.pop();
+                    if (category == 1) { searchByCategory(transactionAmount, transactionInfo, "clothing"); }
+                    else if (category == 2) { searchByCategory(transactionAmount, transactionInfo, "electronics"); }
+                    else if (category == 3) { searchByCategory(transactionAmount, transactionInfo, "health & beauty"); }
+                    else if (category == 4) { searchByCategory(transactionAmount, transactionInfo, "home & garden"); }
+                    else if (category == 5) { searchByCategory(transactionAmount, transactionInfo, "toys & games"); }
                     auto stop = high_resolution_clock::now();
                     auto duration = duration_cast<microseconds>(stop - start);
                     cout << "This function execution took: " << duration.count() << " microsecond(s)" << endl;
-                    cout<<endl;
+                    cout << endl;
+                }
+            } else if (command == 5) {
+                cout << "Which data structure you would like to use?" << endl;
+                cout << "[1] Map" << endl;
+                cout << "[2] Heap" << endl;
+
+                int dataStructureChoice;
+                cin >> dataStructureChoice;
+
+                if (dataStructureChoice == 1) {
+                    int payment;
+                    cout << "Payment Methods:";
+                    cout << "[1] bank transfer, [2] credit card, [3] debit card, [4] PayPal" << endl;
+                    cout
+                            << "Please enter the number associated with the payment method you want to view the fraudulent transactions: "
+                            << endl;
+                    cin >> payment;
+                    cout << endl;
+                    auto start = high_resolution_clock::now();
+                    if (payment == 1) { searchByPaymentMethod(transactionAmount, transactionInfo, "bank transfer"); }
+                    else if (payment == 2) { searchByPaymentMethod(transactionAmount, transactionInfo, "credit card"); }
+                    else if (payment == 3) { searchByPaymentMethod(transactionAmount, transactionInfo, "debit card"); }
+                    else if (payment == 4) { searchByPaymentMethod(transactionAmount, transactionInfo, "PayPal"); }
+                    auto stop = high_resolution_clock::now();
+                    auto duration = duration_cast<microseconds>(stop - start);
+                    cout << "This function execution took: " << duration.count() << " microsecond(s)" << endl;
+                    cout << endl;
                 }
             }
         }
